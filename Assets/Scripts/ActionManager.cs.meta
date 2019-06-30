@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 0051514a9ef1059469749b1b8428cbe8
+timeCreated: 1519757035
+licenseType: Free
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - points: {fileID: 114549556696549242, guid: ab922959ffbe03f42911e0d19a03c142, type: 2}
+  - selectedSquaresUI: {fileID: 114089083372783886, guid: 552db5e6b1d82874eb2945baaecf63ef,
+      type: 2}
+  - gameManager: {fileID: 114790178614587498, guid: dbe6924511ab2c64081487f69aa472e5,
+      type: 2}
+  - level: {fileID: 114934613375684176, guid: 4c5742125601493449092e0bf6089dd9, type: 2}
+  - source: {fileID: 82795415429116916, guid: b33012d63f340664d99e9bb776efba17, type: 2}
+  - hitSound: {fileID: 8300000, guid: 018b81441c432c645a510e768079be2a, type: 3}
+  - errorSound: {fileID: 8300000, guid: 8c4f2295b27f1514e94bb86fecfc75d7, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
