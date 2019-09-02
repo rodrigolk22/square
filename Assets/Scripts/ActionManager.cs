@@ -1,23 +1,22 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-//Gerencia as ações do jogador e faz a solicitação de nova fase e de fim de jogo
+//Gerencia as ações do jogador fazendo a solicitação de uma nova fase ou do fim de jogo
 public class ActionManager : MonoBehaviour {
 
     public int currentPoints = 0;
     public int currentErrors = 0;
     public static int currentHits = 0;
     public int selectedSquares = 0;
+    //Variáveis para referência
     public Text pointsUI;
     public Text errorUI;
     public GameManager gameManager;
-    public Level level;
+    public LevelManager level;
     public Button nextLevel;
     public Button gameOver;
 
-    //Checa o padrão do Square e encaminha para o procedimento correspondente
+    //Checa o padrão do quadrado e encaminha para o procedimento correspondente
     public void selectedSquare(bool pattern)
     {
         if (pattern)
@@ -44,7 +43,12 @@ public class ActionManager : MonoBehaviour {
             //Atualiza os pontos
             gameManager.totalPoints += currentPoints;
             //Limpa a tela
-            level.clean();
+            GameObject[] squareObjects = GameObject.FindGameObjectsWithTag("ObjectToDestroy");
+            int lenght = squareObjects.Length;
+            for (int i = 0; i < lenght; i++)
+            {
+                Destroy(squareObjects[i]);
+            }
             //Atualiza a tela de erros
             errorUI.text = "Errors: 0";
             //Muda a mensagem de transição quando não há erros
@@ -59,10 +63,14 @@ public class ActionManager : MonoBehaviour {
             //Exibe um botão para que o jogador solicite uma nova fase
             nextLevel.gameObject.SetActive(true);
             //Reseta os valores da fase atual
-            reset();
+            currentPoints = 0;
+            currentErrors = 0;
+            currentHits = 0;
+            selectedSquares = 0;
+            loadTexts();
         }
     }
-    //Realiza adiversas ações relacionadas a seleção errada
+    //Realiza diversas ações relacionadas a seleção errada
     public void countError()
     {
         //Atualiza os valores e a interface
@@ -73,21 +81,17 @@ public class ActionManager : MonoBehaviour {
         if ((gameManager.defaultErrors + gameManager.currentLimitErrors) == currentErrors)
         {
             //Limpa a tela
-            level.clean();
+            GameObject[] squareObjects = GameObject.FindGameObjectsWithTag("ObjectToDestroy");
+            int lenght = squareObjects.Length;
+            for (int i = 0; i < lenght; i++)
+            {
+                Destroy(squareObjects[i]);
+            }
             //Exibe o botão de fim do jogo
             gameOver.gameObject.SetActive(true);
             //Solicita o Game Manager realizar o final do jogo
             gameManager.gameOver();
         }
-    }
-    //Reseta os valores correntes da fase
-    public void reset()
-    {
-        currentPoints = 0;
-        currentErrors = 0;
-        currentHits = 0;
-        selectedSquares = 0;
-        loadTexts();
     }
     //Exibe a interface inicial do jogo. Chamado pelo Play Button
     public void loadTexts()

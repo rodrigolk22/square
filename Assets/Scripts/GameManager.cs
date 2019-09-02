@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-//Game Manager faz o gerenciamentoto das telas e níveis do jogo
+//Game Manager faz o gerenciamento das telas e níveis do jogo
 public class GameManager : MonoBehaviour {
 
     public int initialLines;
@@ -14,21 +12,12 @@ public class GameManager : MonoBehaviour {
     public int currentColumns;
     public int totalPoints = 0;
     private bool toggleAxis = true;
-    public int randomClip;
-    public AudioSource backgroundMusic;
-    public AudioClip bgm_1;
-    public AudioClip bgm_2;
+    //Variáveis para referência
     public Text totalPointsUI;
     public Text resultGameUI;
     public Text credits;
-    public Level currentLevel;
-
-    //Ao iniciar o programa a musica de fundo também é inicializada
-    private void Start()
-    {
-        backgroundMusic.clip = bgm_1;
-        backgroundMusic.Play();
-    }
+    public LevelManager currentLevel;
+    
     //Durante a execução do jogo, apertar o botão "Esc" permite encerrar a aplicação
     void Update()
     {
@@ -42,7 +31,7 @@ public class GameManager : MonoBehaviour {
     {
         Application.Quit();
     }
-    //Função modifica os parametros para construir novo nível e chama o Music controller
+    //Função modifica os parametros para construir novo nível
     public void nextLevel()
     {
         //Atualiza a visualização dos pontos totais
@@ -57,9 +46,9 @@ public class GameManager : MonoBehaviour {
         else
         {
             currentLines++;
-            currentLevel.offSetAdjustamentX -= 10;
+            currentLevel.offSetAdjustamentX -= 16;
             toggleAxis = true;
-            //Conforme aumenta a matriz, a change de erros aumenta levemente
+            //Conforme aumenta a matriz, a change de erros aumenta
             currentLimitErrors++;
         }
         currentLevel.sizeColumns = initialColumns + currentColumns;
@@ -69,8 +58,8 @@ public class GameManager : MonoBehaviour {
 	//Realiza o reset dos atributos e informa o jogador o total de pontos
 	public void gameOver()
     {
-        currentLevel.offSetAdjustamentY = 0;
-        currentLevel.offSetAdjustamentX = 0;
+        currentLevel.offSetAdjustamentY = currentLevel.offSetAdjustamentYDefault;
+        currentLevel.offSetAdjustamentX = currentLevel.offSetAdjustamentXDefault;
         currentColumns = 0;
         currentLines = 0;
         currentLimitErrors = 0;
@@ -78,6 +67,5 @@ public class GameManager : MonoBehaviour {
         resultGameUI.text = "Game Over! Total points:  " + totalPoints;
         credits.enabled = true;
     }
-   
-    
+
 }
