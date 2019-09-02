@@ -16,7 +16,6 @@ public class LevelManager : MonoBehaviour {
     public int offSetAdjustamentY = 150;
     public int offSetTile = 30;
     //Variaveis para referência
-    public int timeToHidePattern = 2;
     public Canvas gameCanvas;
     public GameObject errorSquare;
     public GameObject patternSquare;

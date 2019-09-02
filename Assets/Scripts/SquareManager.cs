@@ -10,8 +10,6 @@ public class SquareManager : MonoBehaviour
     public Sprite standardFrame;
     public Sprite selectedFrame;
     public Sprite crackedFrame;
-    //Variáveis para referência
-    public LevelManager levelObject;
 
     //Realiza a transição inicial da aparencia do quadrado
     void Start()
@@ -35,7 +33,7 @@ public class SquareManager : MonoBehaviour
     IEnumerator showingFrame()
     {
         //Aguarda por segundos
-        yield return new WaitForSeconds(levelObject.timeToHidePattern);
+        yield return new WaitForSeconds(2);
         if (pattern == true)
         {
             //Esconde o padrão
