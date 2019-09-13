@@ -4,18 +4,15 @@ using UnityEngine.UI;
 //Game Manager faz o gerenciamento das telas e níveis do jogo
 public class GameManager : MonoBehaviour {
 
-    public int initialLines;
-    public int initialColumns;
-    public int defaultErrors = 3;
-    public int currentLimitErrors;
+    public int initialLines = 3;
+    public int initialColumns = 2;
+    public int limitErrors = 3;
     public int currentLines;
     public int currentColumns;
     public int totalPoints = 0;
     private bool toggleAxis = true;
     //Variáveis para referência
-    public Text totalPointsUI;
     public Text resultGameUI;
-    public Text credits;
     public LevelManager currentLevel;
     
     //Durante a execução do jogo, apertar o botão "Esc" permite encerrar a aplicação
@@ -34,8 +31,6 @@ public class GameManager : MonoBehaviour {
     //Função modifica os parametros para construir novo nível
     public void nextLevel()
     {
-        //Atualiza a visualização dos pontos totais
-        totalPointsUI.text = "Total: " + totalPoints;
         //Adiciona alternadamente as linhas e colunas e faz ajuste de posição na tela
         if (toggleAxis == true)
         {
@@ -48,8 +43,6 @@ public class GameManager : MonoBehaviour {
             currentLines++;
             currentLevel.offSetAdjustamentX -= 16;
             toggleAxis = true;
-            //Conforme aumenta a matriz, a change de erros aumenta
-            currentLimitErrors++;
         }
         currentLevel.sizeColumns = initialColumns + currentColumns;
         currentLevel.sizeLines = initialLines + currentLines;
@@ -62,10 +55,8 @@ public class GameManager : MonoBehaviour {
         currentLevel.offSetAdjustamentX = currentLevel.offSetAdjustamentXDefault;
         currentColumns = 0;
         currentLines = 0;
-        currentLimitErrors = 0;
         toggleAxis = true;
-        resultGameUI.text = "Game Over! Total points:  " + totalPoints;
-        credits.enabled = true;
+        resultGameUI.text = "Fim de jogo! Total de pontos:  " + totalPoints;
     }
 
 }

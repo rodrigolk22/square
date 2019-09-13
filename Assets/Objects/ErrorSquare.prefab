@@ -121,11 +121,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pattern: 1
   selected: 0
-  standardFrame: {fileID: 21300000, guid: 52c2d78a99386a44fa8f31d82a54f3f9, type: 3}
+  standardFrame: {fileID: 21300000, guid: c0809a47b16acf34689d8e815f187720, type: 3}
   selectedFrame: {fileID: 21300000, guid: 05c02c6fe950c2d4bb86c3e078c69340, type: 3}
   crackedFrame: {fileID: 21300000, guid: 5348ffed8af70284c9adede8ddb6edbd, type: 3}
-  levelObject: {fileID: 114823631261212560, guid: 4c5742125601493449092e0bf6089dd9,
-    type: 2}
 --- !u!114 &114898179122507588
 MonoBehaviour:
   m_ObjectHideFlags: 1

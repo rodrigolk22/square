@@ -9,7 +9,6 @@ public class SquareManager : MonoBehaviour
     public bool selected;
     public Sprite standardFrame;
     public Sprite selectedFrame;
-    public Sprite crackedFrame;
 
     //Realiza a transição inicial da aparencia do quadrado
     void Start()
