@@ -7,7 +7,7 @@ public class LevelManager : MonoBehaviour {
     public int sizeColumns;
     public int totalSquares;
     public int numberOfPatterns;
-    private bool[,] pattern;
+    private bool[,] patternMap;
     public int offSetX = 10;
     public int offSetY = 10;
     public int offSetAdjustamentXDefault = 266;
@@ -23,7 +23,7 @@ public class LevelManager : MonoBehaviour {
 
     public void createMatrix(){
         //Definindo uma matriz de padrões
-        pattern = new bool[sizeLines, sizeColumns];
+        patternMap = new bool[sizeLines, sizeColumns];
         //Definindo o número de padrões que serão inseridos
         totalSquares = (sizeLines * sizeColumns);
         numberOfPatterns = totalSquares / 3;
@@ -37,9 +37,9 @@ public class LevelManager : MonoBehaviour {
             randomX = Random.Range(0, sizeLines);
             randomY = Random.Range(0, sizeColumns);
             //Impede padrão seja marcado mais de uma vez na mesma posição
-            if (pattern[randomX, randomY] == false)
+            if (patternMap[randomX, randomY] == false)
             {
-                pattern[randomX, randomY] = true;
+                patternMap[randomX, randomY] = true;
                 remaningPatterns--;
             }
         }
@@ -59,7 +59,7 @@ public class LevelManager : MonoBehaviour {
                 actualPosition.z = 10;
                 GameObject newSquareInstance;
                 //Checa se é padrão
-                if (pattern[x, y] == true)
+                if (patternMap[x, y] == true)
                 {
                    newSquareInstance = Instantiate(patternSquare) as GameObject;   
                 }

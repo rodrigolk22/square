@@ -11,23 +11,17 @@ public class GameManager : MonoBehaviour {
     public int currentColumns;
     public int totalPoints = 0;
     private bool toggleAxis = true;
-    //Variáveis para referência
-    public Text resultGameUI;
+    public int currentErrors = 0;
+    public static int currentHits = 0;
+    //Variáveis para referência pois as funções alteram diretamente nas variáveis
     public LevelManager currentLevel;
-    
-    //Durante a execução do jogo, apertar o botão "Esc" permite encerrar a aplicação
-    void Update()
-    {
-        if (Input.GetKey("escape"))
-        {
-            quitGame();
-        }
-    }
-    //Função que encerra a aplicação. Ela é chamada acionando o botão ExitGameButton.
-    public void quitGame()
-    {
-        Application.Quit();
-    }
+    public Text infoGameUI;
+    public GameObject title;
+    public Text pointsUI;
+    public Text errorUI;
+    public Button nextLevelButton;
+    public Button playButton;
+
     //Função modifica os parametros para construir novo nível
     public void nextLevel()
     {
@@ -48,15 +42,76 @@ public class GameManager : MonoBehaviour {
         currentLevel.sizeLines = initialLines + currentLines;
         currentLevel.createMatrix();
     }
-	//Realiza o reset dos atributos e informa o jogador o total de pontos
-	public void gameOver()
-    {
-        currentLevel.offSetAdjustamentY = currentLevel.offSetAdjustamentYDefault;
-        currentLevel.offSetAdjustamentX = currentLevel.offSetAdjustamentXDefault;
-        currentColumns = 0;
-        currentLines = 0;
-        toggleAxis = true;
-        resultGameUI.text = "Fim de jogo! Total de pontos:  " + totalPoints;
-    }
 
+    //Checa o padrão do quadrado e encaminha para o procedimento correspondente
+    public void selectedSquare(bool pattern)
+    {
+        if (pattern)
+        {
+            countPoint();
+        }
+        else
+        {
+            countError();
+        }
+    }
+    //Realiza adiversas ações relacionadas a um padrão selecionado corretamente
+    public void countPoint()
+    {
+        //Atualiza os pontos
+        currentHits++;
+        totalPoints++;
+        //Atualiza a tela
+        pointsUI.text = "Pontos: " + totalPoints;
+        //Em caso de conclusão de fase
+        if (currentLevel.numberOfPatterns <= currentHits)
+        {
+            //Limpa a tela
+            GameObject[] squareObjects = GameObject.FindGameObjectsWithTag("ObjectToDestroy");
+            int lenght = squareObjects.Length;
+            for (int i = 0; i < lenght; i++)
+            {
+                Destroy(squareObjects[i]);
+            }
+            //Atualiza a tela de erros
+            errorUI.text = "Erros: 0";
+            infoGameUI.text = "Muito bom! Total de pontos: " + totalPoints;
+            //Exibe um botão para que o jogador solicite uma nova fase
+            nextLevelButton.gameObject.SetActive(true);
+            //Reseta as ações da fase da fase
+            currentErrors = 0;
+            currentHits = 0;
+        }
+    }
+    //Realiza diversas ações relacionadas a seleção errada
+    public void countError()
+    {
+        //Atualiza os valores e a interface
+        currentErrors++;
+        errorUI.text = "Erros: " + currentErrors;
+        //Checa se o jogador excedeu o limite de erros
+        if (limitErrors <= currentErrors)
+        {
+            //Limpa a tela
+            GameObject[] squareObjects = GameObject.FindGameObjectsWithTag("ObjectToDestroy");
+            int lenght = squareObjects.Length;
+            for (int i = 0; i < lenght; i++)
+            {
+                Destroy(squareObjects[i]);
+            }
+            //Exibe o botão de jogar novamente
+            playButton.gameObject.SetActive(true);
+            //Reseta as ações para um novo jogo
+            currentErrors = 0;
+            currentHits = 0;
+            currentLevel.offSetAdjustamentY = currentLevel.offSetAdjustamentYDefault;
+            currentLevel.offSetAdjustamentX = currentLevel.offSetAdjustamentXDefault;
+            currentColumns = 0;
+            currentLines = 0;
+            toggleAxis = true;
+            infoGameUI.text = "Fim de jogo! Total de pontos:  " + totalPoints;
+            title.SetActive(true);
+        }
+    }
+  
 }
