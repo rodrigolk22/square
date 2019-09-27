@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour {
     //Função modifica os parametros para construir novo nível
     public void nextLevel()
     {
+        infoGameUI.text = "";
         //Adiciona alternadamente as linhas e colunas e faz ajuste de posição na tela
         if (toggleAxis == true)
         {
