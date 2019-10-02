@@ -13,10 +13,25 @@ public class GameManager : MonoBehaviour {
     private bool toggleAxis = true;
     public int currentErrors = 0;
     public static int currentHits = 0;
+    public int sizeLines;
+    public int sizeColumns;
+    public int totalSquares;
+    public int numberOfPatterns;
+    private bool[,] patternMap;
+    public int offSetX = 10;
+    public int offSetY = 10;
+    public int offSetAdjustamentXDefault = 266;
+    public int offSetAdjustamentYDefault = 150;
+    public int offSetAdjustamentX = 272;
+    public int offSetAdjustamentY = 150;
+    public int offSetTile = 30;
     //Variáveis para referência pois as funções alteram diretamente nas variáveis
-    public LevelManager currentLevel;
+    public Canvas gameCanvas;
+    public GameObject errorSquare;
+    public GameObject patternSquare;
+    public GameObject[] squareObjects;
     public Text infoGameUI;
-    public GameObject title;
+    public GameObject titleUI;
     public Text pointsUI;
     public Text errorUI;
     public Button nextLevelButton;
@@ -24,24 +39,78 @@ public class GameManager : MonoBehaviour {
 
     //Função modifica os parametros para construir novo nível
     public void nextLevel()
-    {
-        infoGameUI.text = "";
+    { 
         //Adiciona alternadamente as linhas e colunas e faz ajuste de posição na tela
         if (toggleAxis == true)
         {
             currentColumns++;
-            currentLevel.offSetAdjustamentY -= 10;
+            offSetAdjustamentY -= 10;
             toggleAxis = false;
         }
         else
         {
             currentLines++;
-            currentLevel.offSetAdjustamentX -= 16;
+            offSetAdjustamentX -= 16;
             toggleAxis = true;
         }
-        currentLevel.sizeColumns = initialColumns + currentColumns;
-        currentLevel.sizeLines = initialLines + currentLines;
-        currentLevel.createMatrix();
+        sizeColumns = initialColumns + currentColumns;
+        sizeLines = initialLines + currentLines;
+        //Definindo uma matriz de padrões
+        patternMap = new bool[sizeLines, sizeColumns];
+        //Definindo o número de padrões que serão inseridos
+        totalSquares = (sizeLines * sizeColumns);
+        numberOfPatterns = totalSquares / 3;
+        //Variáveis auxiliares para sorteio do padrão
+        int remaningPatterns = numberOfPatterns;
+        int randomX;
+        int randomY;
+        while (remaningPatterns > 0)
+        {
+            //Função que faz o sorteio baseado nos limites dados
+            randomX = Random.Range(0, sizeLines);
+            randomY = Random.Range(0, sizeColumns);
+            //Impede padrão seja marcado mais de uma vez na mesma posição
+            if (patternMap[randomX, randomY] == false)
+            {
+                patternMap[randomX, randomY] = true;
+                remaningPatterns--;
+            }
+        }
+        //Criando os quadrados
+        //Variaveis para auxiliar a identificação dos quadrados
+        int positionY = 0;
+        int positionX = 0;
+        //Instancia os quadrados conforme a matriz de padrões
+        for (int y = 0; y < sizeColumns; y++)
+        {
+            for (int x = 0; x < sizeLines; x++)
+            {
+                //Atualiza a posição do novo quadrado através de um objeto Vector que tem as coordenadas x, y e z
+                Vector3 actualPosition = patternSquare.transform.position;
+                actualPosition.x = (x * offSetTile) + offSetX + offSetAdjustamentX;
+                actualPosition.y = (y * offSetTile) + offSetY + offSetAdjustamentY;
+                actualPosition.z = 10;
+                GameObject newSquareInstance;
+                //Checa se é padrão
+                if (patternMap[x, y] == true)
+                {
+                    newSquareInstance = Instantiate(patternSquare) as GameObject;
+                }
+                else
+                {
+                    newSquareInstance = Instantiate(errorSquare) as GameObject;
+                }
+                //Define o nome do novo quadrados
+                newSquareInstance.name = "Square Y" + positionY + " X " + positionX;
+                //Adiciona uma etiqueta para auxiliar a busca dos objetos que serão destruídos no final da fase
+                newSquareInstance.tag = "ObjectToDestroy";
+                //Posiciona dentro do Canvas para que o unity renderize o botão corretamente
+                newSquareInstance.transform.SetParent(gameCanvas.transform, false);
+                newSquareInstance.transform.position = actualPosition;
+                positionX++;
+            }
+            positionY++;
+        }
     }
 
     //Checa o padrão do quadrado e encaminha para o procedimento correspondente
@@ -65,7 +134,7 @@ public class GameManager : MonoBehaviour {
         //Atualiza a tela
         pointsUI.text = "Pontos: " + totalPoints;
         //Em caso de conclusão de fase
-        if (currentLevel.numberOfPatterns <= currentHits)
+        if (numberOfPatterns <= currentHits)
         {
             //Limpa a tela
             GameObject[] squareObjects = GameObject.FindGameObjectsWithTag("ObjectToDestroy");
@@ -105,13 +174,13 @@ public class GameManager : MonoBehaviour {
             //Reseta as ações para um novo jogo
             currentErrors = 0;
             currentHits = 0;
-            currentLevel.offSetAdjustamentY = currentLevel.offSetAdjustamentYDefault;
-            currentLevel.offSetAdjustamentX = currentLevel.offSetAdjustamentXDefault;
+            offSetAdjustamentY = offSetAdjustamentYDefault;
+            offSetAdjustamentX = offSetAdjustamentXDefault;
             currentColumns = 0;
             currentLines = 0;
             toggleAxis = true;
             infoGameUI.text = "Fim de jogo! Total de pontos:  " + totalPoints;
-            title.SetActive(true);
+            titleUI.SetActive(true);
         }
     }
   
